@@ -54,21 +54,21 @@ class MyFace extends React.Component {
     e.persist();
     this.setState({
         pos: {
-          top: e.clientY,
-          left: e.clientX,
+          top: e.pageY,
+          left: e.pageX,
         }
     })
   };
 
-  addPart = (e) => {
-    const {partNum, degree} = this.state;
+  addPart = () => {
+    const {partNum, degree, pos} = this.state;
     const img = new Image();
     const canvas = this.canvas.current;
     const ctx = canvas.getContext('2d');
     img.src = parts[partNum];
 
-    const dx = e.clientX - canvas.offsetLeft;
-    const dy = e.clientY - canvas.offsetTop;
+    const dx = pos.left - canvas.offsetLeft;
+    const dy = pos.top - canvas.offsetTop;
     drawRotatedImage(ctx, img, dx, dy, this.size, degree);
 
     this.setState(prevState => {
@@ -95,27 +95,43 @@ class MyFace extends React.Component {
   render() {
     const {partNum, degree, pos, image} = this.state;
     return (
+      <React.Fragment>
+        <div style={{fontSize: 'large'}}>
+          <p>遊び方：</p>
+          <p>パーツの置きたい位置をタップする。(ドラッグ未対応)</p>
+          <p>位置が決まったら確定！</p>
+          <p>右目→左目→鼻→口の順番</p>
+        </div>
       <div
-        onMouseMove={this.setPos}
-        onClick={partNum < parts.length ? this.addPart : null}
+        // onMouseMove={this.setPos}
+        onClick={partNum < parts.length ? this.setPos : null}
       >
         <canvas
-          width='600px'
-          height='600px'
+          width='400px'
+          height='500px'
           style={{backgroundColor: '#FFFFFF'}}
           ref={this.canvas}
         />
-        {partNum < parts.length ?
+        {partNum < parts.length &&
         <RotatedImg
           src={parts[partNum]}
           degree={degree}
           size={this.size}
           top={pos.top}
           left={pos.left}
-        />:
-        <a href={image} download='canvas.jpg' onClick={this.download}>download</a>
-        }
+        />}
       </div>
+        <button style={{fontSize: 'xx-large'}} onClick={this.addPart}>確定！！</button>
+        {partNum >= parts.length &&
+        <a
+          href={image}
+          download='canvas.jpg'
+          onClick={this.download}
+          style={{backgroundColor: '#ffffff'}}
+        >
+          画像を保存！
+        </a>}
+      </React.Fragment>
     );
   }
 }
