@@ -93,7 +93,7 @@ class MyFace extends React.Component {
   };
 
   render() {
-    const {partNum, degree, pos, image} = this.state;
+    const {partNum, degree, pos} = this.state;
     return (
       <React.Fragment>
         <div style={{fontSize: 'large'}}>
@@ -122,15 +122,6 @@ class MyFace extends React.Component {
         />}
       </div>
         <button style={{fontSize: 'xx-large'}} onClick={this.addPart}>確定！！</button>
-        {partNum >= parts.length &&
-        <a
-          href={image}
-          download='canvas.jpg'
-          onClick={this.download}
-          style={{backgroundColor: '#ffffff'}}
-        >
-          画像を保存！
-        </a>}
       </React.Fragment>
     );
   }
